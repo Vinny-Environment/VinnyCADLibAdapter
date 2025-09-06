@@ -4,20 +4,45 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace VinnyCADLibAdapter
+namespace VinnyCADLibLoader
 {
     public partial class VinnyMenu : Form, ICADLibPlugin
     {
+        private static PluginsManager mManager;
+        private static void AddEnv(string path)
+        {
+            string newEnwPathValue = Environment.GetEnvironmentVariable("PATH");
+            if (newEnwPathValue.EndsWith(";")) newEnwPathValue += path + ";";
+            else newEnwPathValue += ";" + path + ";";
+
+            Environment.SetEnvironmentVariable("PATH", newEnwPathValue);
+        }
+
         public VinnyMenu(PluginsManager manager)
         {
+            mManager = manager;
+            string executingAssemblyFile = new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
+            string executionDirectoryPath = System.IO.Path.GetDirectoryName(executingAssemblyFile);
+
+            //Load Vinny
+            string vinnyPath = new DirectoryInfo(executionDirectoryPath).Parent.Parent.FullName;
+            string VinnyLibConverterCommonPath = Path.Combine(vinnyPath, "VinnyLibConverterCommon.dll");
+            string VinnyLibConverterKernelPath = Path.Combine(vinnyPath, "VinnyLibConverterKernel.dll");
+            string VinnyCADLibAdapterPath = Path.Combine(executionDirectoryPath, "VinnyCADLibAdapter.dll");
+
+            string VinnyLibConverterUIPath = Path.Combine(vinnyPath, "ui", "net48", "VinnyLibConverterUI.dll");
+
+            AddEnv(vinnyPath);
+
             InitializeComponent();
-            CADLibData.mManager = manager;
         }
 
         public MenuStrip GetMenu()
@@ -38,20 +63,12 @@ namespace VinnyCADLibAdapter
 
         private void VinnyImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(true);
-            if (vinnyWindow.ShowDialog() == true)
-            {
-                VinnyCaDLibImporter.CreateInstance().ImportFrom(vinnyWindow.VinnyParametets);
-            }
+            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Import(mManager);
         }
 
         private void vinnyExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(false);
-            if (vinnyWindow.ShowDialog() == true)
-            {
-                VinnyCADLibExporter.CreateInstance().ExportTo(VinnyCADLibExporter.CreateInstance().CreateData(), vinnyWindow.VinnyParametets);
-            }
+            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Export(mManager);
         }
 
         private void VinnyAboutToolStripMenuItem_Click(object sender, EventArgs e)

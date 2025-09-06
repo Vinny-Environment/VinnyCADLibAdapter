@@ -2,10 +2,12 @@
 
   <PropertyGroup>
       <TargetFramework>net48</TargetFramework>
-      <OutputPath>$(SolutionDir)..\VinnyLibBin\$(Configuration)\plugins\cadlib</OutputPath>
+      <OutDir>$(SolutionDir)..\VinnyLibBin\$(Configuration)\plugins\cadlib</OutDir>
       <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
       <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+      <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+      <GenerateDependencyFile>true</GenerateDependencyFile>
       <UseWPF>true</UseWPF>
       <UseWindowsForms>true</UseWindowsForms>
       <PlatformTarget>x64</PlatformTarget>
@@ -53,6 +55,30 @@
             <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CdeLib.dll</HintPath>
             <Private>False</Private>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resource.Designer.cs">
+        <DependentUpon>Resource.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="VinnyMenu.cs">
+        <SubType>Form</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resource.resx">
+        <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="icons\vinnyIcon_32x32.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

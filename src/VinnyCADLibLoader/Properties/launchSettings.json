@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CADLib 3.2.520.2899": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files (x86)\\CSoft\\Model Studio CS\\Viewer\\bin\\x64\\CADLib.exe"
+    }
+  }
+}

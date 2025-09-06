@@ -1,4 +1,4 @@
-﻿namespace VinnyCADLibAdapter
+namespace VinnyCADLibLoader
 {
     partial class VinnyMenu
     {
@@ -60,7 +60,7 @@
             // 
             // VinnyImportToolStripMenuItem
             // 
-            this.VinnyImportToolStripMenuItem.Image = global::VinnyCADLibAdapter.Resource.vinnyIcon_32x32;
+            this.VinnyImportToolStripMenuItem.Image = global::VinnyCADLibLoader.Resource.vinnyIcon_32x32;
             this.VinnyImportToolStripMenuItem.Name = "VinnyImportToolStripMenuItem";
             this.VinnyImportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.VinnyImportToolStripMenuItem.Text = "Импорт данных";
@@ -68,7 +68,7 @@
             // 
             // vinnyExportToolStripMenuItem
             // 
-            this.vinnyExportToolStripMenuItem.Image = global::VinnyCADLibAdapter.Resource.vinnyIcon_32x32;
+            this.vinnyExportToolStripMenuItem.Image = global::VinnyCADLibLoader.Resource.vinnyIcon_32x32;
             this.vinnyExportToolStripMenuItem.Name = "vinnyExportToolStripMenuItem";
             this.vinnyExportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.vinnyExportToolStripMenuItem.Text = "Экспорт данных";
