@@ -1,0 +1,114 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>net48</TargetFramework>
+      <OutputPath>$(SolutionDir)..\VinnyLibBin\$(Configuration)\plugins\cadlib</OutputPath>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+      <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+      <UseWPF>true</UseWPF>
+      <UseWindowsForms>true</UseWindowsForms>
+      <PlatformTarget>x64</PlatformTarget>
+      <Platforms>x64</Platforms>
+      <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="VinnyLibConverterCommon">
+            <HintPath>$(SolutionDir)..\VinnyLibBin\Debug\VinnyLibConverterCommon.dll</HintPath>
+            <Private>False</Private>
+            <EmbedInteropTypes>False</EmbedInteropTypes>
+        </Reference>
+        <Reference Include="VinnyLibConverterKernel">
+            <HintPath>$(SolutionDir)..\VinnyLibBin\Debug\VinnyLibConverterKernel.dll</HintPath>
+            <Private>False</Private>
+            <EmbedInteropTypes>False</EmbedInteropTypes>
+        </Reference>
+        <Reference Include="VinnyLibConverterUI">
+            <HintPath>$(SolutionDir)..\VinnyLibBin\Debug\ui\net48\VinnyLibConverterUI.dll</HintPath>
+            <Private>False</Private>
+            <EmbedInteropTypes>False</EmbedInteropTypes>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="CADLibControls">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CADLibControls.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="NApp">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\NApp.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Interop.NWEViewerComponentLib">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\Interop.NWEViewerComponentLib.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CoSql.Runtime">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CoSql.Runtime.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Crom.Controls">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\Crom.Controls.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="AppNWEViewerComponent">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\AppNWEViewerComponent.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CSProject3D">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CSProject3D.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CADLibKernel">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CADLibKernel.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="NData">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\NData.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CdeLib">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CdeLib.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="FLib">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\FLib.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="MsBinaryPublisher">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\MsBinaryPublisher.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CSAppServices">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\CSAppServices.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\Newtonsoft.Json.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resource.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resource.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resource.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="icons\vinnyIcon_32x32.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>
