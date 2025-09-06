@@ -9,7 +9,11 @@ namespace VinnyCADLibAdapter
 {
     public class VinnyCADLibAdapterFunctions
     {
-        public static void Import(PluginsManager manager)
+        public static void SetPluginsManager(PluginsManager manager)
+        {
+            CADLibData.mManager = manager;
+        }
+        public static void Import()
         {
             VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(true);
             if (vinnyWindow.ShowDialog() == true)
@@ -17,7 +21,7 @@ namespace VinnyCADLibAdapter
                 VinnyCaDLibImporter.CreateInstance().ImportFrom(vinnyWindow.VinnyParametets);
             }
         }
-        public static void Export(PluginsManager manager)
+        public static void Export()
         {
             VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(false);
             if (vinnyWindow.ShowDialog() == true)

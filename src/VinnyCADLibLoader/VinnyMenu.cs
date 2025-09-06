@@ -16,32 +16,9 @@ namespace VinnyCADLibLoader
 {
     public partial class VinnyMenu : Form, ICADLibPlugin
     {
-        private static PluginsManager mManager;
-        private static void AddEnv(string path)
-        {
-            string newEnwPathValue = Environment.GetEnvironmentVariable("PATH");
-            if (newEnwPathValue.EndsWith(";")) newEnwPathValue += path + ";";
-            else newEnwPathValue += ";" + path + ";";
-
-            Environment.SetEnvironmentVariable("PATH", newEnwPathValue);
-        }
-
         public VinnyMenu(PluginsManager manager)
         {
-            mManager = manager;
-            string executingAssemblyFile = new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
-            string executionDirectoryPath = System.IO.Path.GetDirectoryName(executingAssemblyFile);
-
-            //Load Vinny
-            string vinnyPath = new DirectoryInfo(executionDirectoryPath).Parent.Parent.FullName;
-            string VinnyLibConverterCommonPath = Path.Combine(vinnyPath, "VinnyLibConverterCommon.dll");
-            string VinnyLibConverterKernelPath = Path.Combine(vinnyPath, "VinnyLibConverterKernel.dll");
-            string VinnyCADLibAdapterPath = Path.Combine(executionDirectoryPath, "VinnyCADLibAdapter.dll");
-
-            string VinnyLibConverterUIPath = Path.Combine(vinnyPath, "ui", "net48", "VinnyLibConverterUI.dll");
-
-            AddEnv(vinnyPath);
-
+            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.SetPluginsManager(manager);
             InitializeComponent();
         }
 
@@ -63,12 +40,12 @@ namespace VinnyCADLibLoader
 
         private void VinnyImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Import(mManager);
+            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Import();
         }
 
         private void vinnyExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Export(mManager);
+            VinnyCADLibAdapter.VinnyCADLibAdapterFunctions.Export();
         }
 
         private void VinnyAboutToolStripMenuItem_Click(object sender, EventArgs e)
