@@ -1,6 +1,8 @@
 # VinnyCADLibAdapter
 Adapter for CSoft CADLib: Модель и Архив
 
+РАЗРАБОТКА ОСТАНОВЛЕНА (см. TODO)
+
 # Установка
 
 Файлы плагина к CSoft CADLib: Модель и Архив расположены в папке `plugins\cadlib` пакета `VinnyLibConverter`(см. [здесь](https://github.com/Vinny-Environment/VinnyLibConverter#%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0))
@@ -30,3 +32,8 @@ Adapter for CSoft CADLib: Модель и Архив
 * `VinnyCADLibAdapter`: основная логика плагина;
 
 В проектах используются внешние зависимости на библиотеки CADLib `C:\Program Files (x86)\CSoft\Model Studio CS\Viewer\bin\x64\`;
+
+# TODO
+
+Ошибка (особенность?) API: CSMesh имеет невалидные грани с двумя совпадающими вершинами, повторяющиеся грани. Это бред;
+Невозможно получить дерево структуры от Комплекса вплоть до всех объектов.

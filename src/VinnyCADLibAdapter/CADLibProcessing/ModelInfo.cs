@@ -152,6 +152,7 @@ namespace VinnyCADLibAdapter.CADLibProcessing
             }
 
             List<int> parentObjectsIdEdited = parentObjectsId.Concat(new int[] { idObject }).ToList();
+            CADLibData.CADLibrary3D.GetChildObjects
             foreach (int chObjectId in Object2ChildsInfo[idObject])
             {
                 sInfo.Childs.Add(ProcessingObjectsHierarchy(chObjectId, parentObjectsIdEdited));
