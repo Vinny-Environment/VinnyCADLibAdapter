@@ -16,18 +16,24 @@ namespace VinnyCADLibAdapter
         public static void Import()
         {
             VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(true);
-            if (vinnyWindow.ShowDialog() == true)
-            {
-                VinnyCaDLibImporter.CreateInstance().ImportFrom(vinnyWindow.VinnyParametets);
-            }
+            VinnyLibConverterCommon.ImportExportParameters inputParams = new VinnyLibConverterCommon.ImportExportParameters();
+#if DEBUG
+            //inputParams = VinnyLibConverterCommon.ImportExportParameters.LoadFromFile(@"E:\Temp\Vinny\rengaTestParams1.XML");
+#else
+            if (vinnyWindow.ShowDialog() == true) inputParams = vinnyWindow.VinnyParametets;
+#endif
+            VinnyCaDLibImporter.CreateInstance().ImportFrom(inputParams);
         }
         public static void Export()
         {
             VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(false);
-            if (vinnyWindow.ShowDialog() == true)
-            {
-                VinnyCADLibExporter.CreateInstance().ExportTo(VinnyCADLibExporter.CreateInstance().CreateData(), vinnyWindow.VinnyParametets);
-            }
+            VinnyLibConverterCommon.ImportExportParameters outputParams = new VinnyLibConverterCommon.ImportExportParameters();
+#if DEBUG
+            outputParams = VinnyLibConverterCommon.ImportExportParameters.LoadFromFile(@"E:\Temp\Vinny\rengaTestParams1.XML");
+#else
+            if (vinnyWindow.ShowDialog() == true) outputParams = vinnyWindow.VinnyParametets;
+#endif
+            VinnyCADLibExporter.CreateInstance().ExportTo(VinnyCADLibExporter.CreateInstance().CreateData(), outputParams);
         }
     }
 }
