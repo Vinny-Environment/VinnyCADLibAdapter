@@ -263,3 +263,4 @@ __pycache__/
 #IcoFX project files
 *.ifx
 VinnyLibConverter.zip
+res/CADLibStructureSchema.vsdx

@@ -57,7 +57,7 @@ namespace VinnyCADLibAdapter.CADLibProcessing
         {
             ProjectObjectId = CADLibData.CADLibrary3D.GetProjectObject().idObject;
 
-            ParamDefId_BUILDINGS_STRUCT_LEVEL = CADLibData.CADLibrary3D.GetParamDefId("BUILDINGS_STRUCT_LEVEL");
+            ParamDefId_BUILDINGS_STRUCT_LEVEL = CADLibData.CADLibrary3D.GetParamDefId(CADLibData.CADLibParameter_BUILDINGS_STRUCT_LEVEL);
 
             //Борьба c теми, кто не входит в m_library.GetCategoriesList()
             for (int cat_counter = 0; cat_counter < 1000; cat_counter++)
@@ -152,7 +152,7 @@ namespace VinnyCADLibAdapter.CADLibProcessing
             }
 
             List<int> parentObjectsIdEdited = parentObjectsId.Concat(new int[] { idObject }).ToList();
-            CADLibData.CADLibrary3D.GetChildObjects
+
             foreach (int chObjectId in Object2ChildsInfo[idObject])
             {
                 sInfo.Childs.Add(ProcessingObjectsHierarchy(chObjectId, parentObjectsIdEdited));

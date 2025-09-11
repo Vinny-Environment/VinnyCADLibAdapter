@@ -100,7 +100,8 @@ namespace VinnyCADLibAdapter
                             int vx_2 = meshDef.Index[f_counter + 1];
                             int vx_3 = meshDef.Index[f_counter + 2];
 
-                            if (new int[] { vx_1, vx_2, vx_3}.Distinct().Count() == 3) vinnyGeometry.AddFace(vx_1, vx_2, vx_3);
+                            //if (new int[] { vx_1, vx_2, vx_3 }.Distinct().Count() == 3)
+                            vinnyGeometry.AddFace(vx_1, vx_2, vx_3);
 
                             tr_counter++;
                         }
