@@ -159,6 +159,14 @@ namespace VinnyCADLibAdapter
                 vinnyNavisScene.Parameters.Add(mVinnyModelDef.ParametersManager.CreateParameterValueWithDefs(CADLibParamInfo.ParamDef.Name, CADLibParamInfo.Value, CADLibParamCategory_Properties, VinnyLibDataStructureParameterDefinitionType.ParamString, CADLibParamInfo.ParamDef.Caption));
             }
 
+            //Всё равно получить иерархию не получается, пусть хоть экспортируется только видимое, а не всё сразу.
+            mCurrentCADLibObjectsData.ModelStructure.Childs = new List<StructureInfo>();
+            foreach (int activeObjectId in mActiveObjectIds)
+            {
+                mCurrentCADLibObjectsData.ModelStructure.Childs.Add(new StructureInfo() { IdObject = activeObjectId });
+
+            }
+
             foreach (StructureInfo CLstructureItem in mCurrentCADLibObjectsData.ModelStructure.Childs)
             {
                 ProcessCadlibObject(CLstructureItem, vinnyNavisScene.Id);

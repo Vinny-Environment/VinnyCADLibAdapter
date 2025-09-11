@@ -90,12 +90,12 @@ namespace VinnyCADLibAdapter
                     Convert.ToByte(vinnyMaterialDef.ColorB));
                 csMesh.SetCurrentMaterial(csMaterial);
 
-                foreach (var triangle in VinnyMesh.mFaces)
+                foreach (var triangle in VinnyMesh.Faces)
                 {
                     int[] triangleIndices = triangle.Value;
-                    float[] p1 = VinnyMesh.mPoints[triangleIndices[0]];
-                    float[] p2 = VinnyMesh.mPoints[triangleIndices[1]];
-                    float[] p3 = VinnyMesh.mPoints[triangleIndices[2]];
+                    float[] p1 = VinnyMesh.Points[triangleIndices[0]];
+                    float[] p2 = VinnyMesh.Points[triangleIndices[1]];
+                    float[] p3 = VinnyMesh.Points[triangleIndices[2]];
 
                     csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3(p1[0], p1[1], p1[2]), CSVector3.AxisZ)));
                     csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3(p2[0], p2[1], p2[2]), CSVector3.AxisZ)));
