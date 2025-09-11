@@ -11,6 +11,8 @@ using VinnyLibConverterKernel;
 
 using ModelStudio.Graphics3D;
 using System.IO;
+using CADLib;
+using CADLibKernel;
 
 namespace VinnyCADLibAdapter
 {
@@ -23,20 +25,22 @@ namespace VinnyCADLibAdapter
             return mInstance;
         }
 
-        private void ProcessObject(StructureInfo obj, CADLibKernel.CSElement parentElement)
+        private void ProcessObject(StructureInfo obj, CADLibKernel.CSElement parentElement, List<int> parentMiniCatalogues)
         {
             VinnyLibDataStructureObject VinnyObject = mVinnyData.ObjectsManager.GetObjectById(obj.Id);
             //Создадим и заполним временный CSElement
 
             CADLibKernel.CSElement csElement;
+            int parentCSid;
             if (parentElement == null) 
             {
                 CADLibKernel.CSElement rootElement = new CADLibKernel.CSElement(Path.GetFileNameWithoutExtension(mInputParams.Path));
                 rootElement.AddParameter(CADLibData.CADLibParameter_BUILDINGS_STRUCT_LEVEL, "1. Площадка (Генплан)", CADLibData.CADLibParameterLABEL_BUILDINGS_STRUCT_LEVEL, "");
-                DBPublisher.PublishElement(rootElement, CADLibData.CADLibCategory_StructureData, 1);
+                parentCSid = DBPublisher.PublishElement(rootElement, CADLibData.CADLibCategory_StructureData, 1);
                 parentElement = rootElement;
             }
-            csElement = new CADLibKernel.CSElement(VinnyObject.Name, parentElement);
+            parentCSid = parentElement.Id;
+            csElement = new CADLibKernel.CSElement(VinnyObject.Name);
 
             string vinnyCADLib_StructureParamRaw = "";
             string vinnyCADLib_Category = mVinnyCADLibCategory;
@@ -63,6 +67,13 @@ namespace VinnyCADLibAdapter
 
             //Запись элемента во временные дамп-файлы
             int idObject = DBPublisher.PublishElement(csElement, vinnyCADLib_Category, 1);
+            // Добавляем объект в соответствующий миникаталог и во все родительские миникаталоги (отложенное назначение)
+            var parentMiniCatalogues2 = parentMiniCatalogues.Concat(new int[] { vinnyObject2CADLibMCatalogId[obj.Id] }).ToList();
+
+            foreach (int parentMCid in parentMiniCatalogues2)
+            {
+                CADLibMCatalogs2Objects[parentMCid].Add(idObject);
+            }
 
             //Сохранение геометрии
 
@@ -115,9 +126,49 @@ namespace VinnyCADLibAdapter
 
             foreach (var subObject in obj.Childs)
             {
-                ProcessObject(subObject, csElement);
+                ProcessObject(subObject, csElement, parentMiniCatalogues2);
             }
         }
+
+        //Создание миникаталогов
+        private void ProcessObject2(StructureInfo obj, CLibCatalogFilterItem parentMC)
+        {
+            VinnyLibDataStructureObject VinnyObject = mVinnyData.ObjectsManager.GetObjectById(obj.Id);
+            CLibCatalogFilterItem mc = CADLibData.CADLibrary3D.CreateDirectory(parentMC, Guid.NewGuid().ToString("N"), VinnyObject.Name, null);
+            SetAcess(mc);
+            vinnyObject2CADLibMCatalogId.Add(obj.Id, mc.nDirectory);
+            CADLibMCatalogs2Objects.Add(mc.nDirectory, new List<int>());
+
+            foreach (var subObject in obj.Childs)
+            {
+                ProcessObject2(subObject, mc);
+            }
+        }
+
+        private List<int> CADLibGroups;
+        private void SetAcess(CLibCatalogFilterItem item)
+        {
+            try
+            {
+                CADLibData.CADLibrary3D.SetFolderAccess(item.nCatID, CADLibGroups);
+            }
+            catch { }
+        }
+
+        private void AddObjectsToDirectory(int nObjectId, int nDir)
+        {
+            CADLibData.CADLibrary3D.AddToDirectory(nObjectId, nDir);
+        }
+
+        /// <summary>
+        /// Сопоставление идентификаторов объектов в VinnyData.ObjectsManager.Objects идентификаторам миникаталогов в CADLib
+        /// </summary>
+        private Dictionary<int, int> vinnyObject2CADLibMCatalogId;
+
+        /// <summary>
+        /// Объекты в миникаталогах. Исполнить после подтверждения публикации, иначе будет ошибка
+        /// </summary>
+        private Dictionary<int, List<int>> CADLibMCatalogs2Objects;
 
         public void ImportFrom(ImportExportParameters openParameters)
         {
@@ -134,22 +185,60 @@ namespace VinnyCADLibAdapter
             DBPublisher.InitPublication(dumpPath);
             DBPublisher.BeginPublication(mVinnyData.ObjectsManager.mObjects.Count);
 
+            // Создание специальной категории объектов для импортируемых данных по умолчанию
             if (CADLibData.CADLibrary3D.GetCategoryInfoByName(mVinnyCADLibCategory) == null)
             {
                 mVinnyObjectsCategory = CADLibData.CADLibrary3D.CreateCategory(mVinnyCADLibCategory, "Объекты созданные через VinnyConverter");
             }
             else mVinnyObjectsCategory = CADLibData.CADLibrary3D.GetCategoryInfoByName(mVinnyCADLibCategory).idCategory;
 
+            // Подготовительные действия для создания миникаталогов
+            vinnyObject2CADLibMCatalogId = new Dictionary<int, int>();
+            CADLibMCatalogs2Objects = new Dictionary<int, List<int>>();
+            int group_need = CADLibData.CADLibrary3D.GetUserGroupBySysName("ALL");
+            CADLibGroups = new List<int>() { group_need };
+
+            // Создание корневого миникаталога для результатов импорта данных в CADLib
+            CLibCatalogFilterItem vinnyMCatalogRoot = CADLibData.CADLibrary3D.GetFolderByPath("F:Результаты импорта данных через VinnyConverter");
+            if (vinnyMCatalogRoot == null) 
+            {
+                vinnyMCatalogRoot = CADLibData.CADLibrary3D.CreateDirectory(null, "VinnyImport", "Результаты импорта данных через VinnyConverter", null);
+                SetAcess(vinnyMCatalogRoot);
+            }
+
+            // Создание миникаталога для данного сеанса импорта
+            CLibCatalogFilterItem vinnyMCatalogCurrent =
+                CADLibData.CADLibrary3D.CreateDirectory(vinnyMCatalogRoot, $"{Guid.NewGuid().ToString("N")}",
+                $"{Path.GetFileNameWithoutExtension(openParameters.Path)} {DateTime.Now.ToString("G")}", null);
+            SetAcess(vinnyMCatalogCurrent);
+            CADLibMCatalogs2Objects.Add(vinnyMCatalogCurrent.nDirectory, new List<int>());
+
+            // Получение структуры данных
             VinnyLibDataStructureObjectsManager.StructureInfo[] vinnyModelStructureInfo = mVinnyData.ObjectsManager.GetAllStructure();
+
+            // Первый прогон ради создания миникаталогов
             foreach (VinnyLibDataStructureObjectsManager.StructureInfo vinnyModelStructureGroupInfo in vinnyModelStructureInfo)
             {
-                ProcessObject(vinnyModelStructureGroupInfo, null);
+                ProcessObject2(vinnyModelStructureGroupInfo, vinnyMCatalogCurrent);
+            }
+
+            // Второй прогон ради импорта объектов и вставки их в созданные миникаталоги используя vinnyObject2CADLibMCatalogId
+            foreach (VinnyLibDataStructureObjectsManager.StructureInfo vinnyModelStructureGroupInfo in vinnyModelStructureInfo)
+            {
+                ProcessObject(vinnyModelStructureGroupInfo, null, new List<int>() { vinnyMCatalogCurrent .nDirectory});
             }
 
 
             //Завершение публикации и запуск вспомогательной утилиты по записи содержимого дамп-файлов в БД
             DBPublisher.CommitPublication();
             DBPublisher.RunCommitUtility();
+
+            // Исполняем CADLibMCatalogs2Objects
+            foreach (var mcInfo in CADLibMCatalogs2Objects)
+            {
+                foreach (int id in mcInfo.Value) CADLibData.CADLibrary3D.AddToDirectory(id, mcInfo.Key);
+            }
+
         }
 
         private const string mCADLibParam_VinnyCADLibObjectType = "VinnyCADLibObjectType";

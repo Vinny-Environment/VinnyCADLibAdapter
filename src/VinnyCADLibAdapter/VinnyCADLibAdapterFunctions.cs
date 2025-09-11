@@ -18,6 +18,7 @@ namespace VinnyCADLibAdapter
             VinnyLibConverterUI.VLC_UI_MainWindow vinnyWindow = new VinnyLibConverterUI.VLC_UI_MainWindow(true);
             VinnyLibConverterCommon.ImportExportParameters inputParams = new VinnyLibConverterCommon.ImportExportParameters();
 #if DEBUG
+            //if (vinnyWindow.ShowDialog() == true) inputParams = vinnyWindow.VinnyParametets;
             inputParams = VinnyLibConverterCommon.ImportExportParameters.LoadFromFile(@"E:\Temp\Vinny\vinnyTestParams_CADLib1.xml");
 #else
             if (vinnyWindow.ShowDialog() == true) inputParams = vinnyWindow.VinnyParametets;
