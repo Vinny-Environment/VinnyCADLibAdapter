@@ -122,8 +122,8 @@ namespace VinnyCADLibAdapter
                     };
                     */
                     var matrix = objectGraphicsShape.GetCoordSystem().Matr;
-                    float[] matrix2 = matrix.Select(a => Convert.ToSingle(a)).ToArray();
-                    vinnyGeomPI.TransformatiomMatrix = matrix2;
+                    //float[] matrix2 = matrix.Select(a => Convert.ToSingle(a)).ToArray();
+                    vinnyGeomPI.TransformatiomMatrix = matrix;
                     mVinnyModelDef.GeometrtyManager.SetMeshGeometryPlacementInfo(vinnyGeomPI.Id, vinnyGeomPI);
 
                     vinnyObjectDef.GeometryPlacementInfoIds.Add(vinnyGeomPI.Id);

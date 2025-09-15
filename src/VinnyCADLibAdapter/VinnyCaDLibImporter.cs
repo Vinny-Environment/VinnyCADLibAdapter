@@ -104,13 +104,13 @@ namespace VinnyCADLibAdapter
                 foreach (var triangle in VinnyMesh.Faces)
                 {
                     int[] triangleIndices = triangle.Value;
-                    float[] p1 = VinnyMesh.Points[triangleIndices[0]];
-                    float[] p2 = VinnyMesh.Points[triangleIndices[1]];
-                    float[] p3 = VinnyMesh.Points[triangleIndices[2]];
+                    double[] p1 = VinnyMesh.Points[triangleIndices[0]];
+                    double[] p2 = VinnyMesh.Points[triangleIndices[1]];
+                    double[] p3 = VinnyMesh.Points[triangleIndices[2]];
 
-                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3(p1[0], p1[1], p1[2]), CSVector3.AxisZ)));
-                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3(p2[0], p2[1], p2[2]), CSVector3.AxisZ)));
-                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3(p3[0], p3[1], p3[2]), CSVector3.AxisZ)));
+                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3((float)p1[0], (float)p1[1], (float)p1[2]), CSVector3.AxisZ)));
+                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3((float)p2[0], (float)p2[1], (float)p2[2]), CSVector3.AxisZ)));
+                    csMesh.Index.Add(csMesh.AddVertex(new CSVertexCompressed(new CSVector3((float)p3[0], (float)p3[1], (float)p3[2]), CSVector3.AxisZ)));
                     csMesh.MaterialIndex.Add(0);
                 }
 
